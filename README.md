@@ -1,2 +1,2 @@
 # shot-game
-canvas
+canvas小游戏
