@@ -1,8 +1,7 @@
 var container = document.getElementById("game");
 var canvas = document.getElementById("canvas");
 var context = canvas.getContext("2d");
-// var animate;
-var timer;
+
 let isStop = false;
 /**
  * 整个游戏对象
@@ -130,7 +129,6 @@ var GAME = {
     this.movePlane();
     this.setScore();
     const { opts } = this;
-    const self = this;
     const { canvasPadding, enemySize, planeSize } = opts;
     const { minX, maxX, maxY } = getCoordinate(this.enemys);
 
@@ -144,18 +142,16 @@ var GAME = {
     } else {
       this.draw();
 
-      timer = setTimeout(() => {
-        this.update();
-      }, 1000 / 30);
-  
-      // this.animate();
+      // timer = setTimeout(() => {
+      //   this.update();
+      // }, 1000 / 30);
+
+      animate = requestAnimFrame(this.update.bind(this));
     }
   },
-  // animate:function(){
-  //   requestAnimFrame(this.update);
-  // },
+
   end: function (status) {
-    // window.cancelAnimFrame(this.animate);
+    window.cancelAnimFrame(animate);
     const { opts } = this;
     const { level, enemySpeed } = opts;
     this.clear();
@@ -256,13 +252,15 @@ var GAME = {
   },
   stop: function () {
     if (isStop) {
-      timer = setTimeout(() => {
-        this.update();
-      }, 1000 / 30);
+      // timer = setTimeout(() => {
+      //   this.update();
+      // }, 1000 / 30);
+      animate = requestAnimFrame(this.update.bind(this));
       document.querySelector(".js-stop").innerHTML = "游戏暂停";
       isStop = false;
     } else {
-      window.clearTimeout(timer);
+      // window.clearTimeout(timer);
+      window.cancelAnimFrame(animate);
       document.querySelector(".js-stop").innerHTML = "游戏恢复";
       isStop = true;
     }
